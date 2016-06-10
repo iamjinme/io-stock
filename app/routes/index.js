@@ -1,14 +1,14 @@
 'use strict';
 
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/clickHandler.server.js');
+var IoStock = require(path + '/app/controllers/ioStock.server.js');
 
 module.exports = function (app) {
 
-	var clickHandler = new ClickHandler();
+	var ioStock = new IoStock();
 
 	app.get('/', function(req, res) {
-		res.sendFile(path + '/public/index.html');
+		res.sendFile(path + '/app/views/index.html');
 	});
 
 };
