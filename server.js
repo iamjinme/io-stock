@@ -22,16 +22,16 @@ db.once('open', function() {
 
 	routes(app);
 
-	var port = process.env.PORT || 8080;
-	app.listen(port,  function () {
-		console.log('Node.js listening on port ' + port + '...');
-	});
-
 	io.on('connection', function (socket) {
 	  socket.emit('news', { hello: 'world' });
 	  socket.on('my other event', function (data) {
 	    console.log(data);
 	  });
+	});
+
+	var port = process.env.PORT || 8080;
+	http.listen(port,  function () {
+		console.log('Node.js listening on port ' + port + '...');
 	});
 
 });
