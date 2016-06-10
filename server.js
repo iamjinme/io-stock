@@ -28,6 +28,16 @@ db.once('open', function() {
 	  socket.on('my other event', function (data) {
 	    console.log(data);
 	  });
+		socket.on('push', function(data){
+			console.log('push:', data)
+			data.code = data.code.toUpperCase();
+	    io.emit('push', data);
+	  });
+		socket.on('pop', function(data){
+			console.log('pop:', data)
+			data.code = data.code.toUpperCase();
+	    io.emit('pop', data);
+	  });
 	});
 
 	var port = process.env.PORT || 8080;

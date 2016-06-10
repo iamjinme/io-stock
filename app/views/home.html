@@ -1,10 +1,20 @@
 <div class="container">
+  <div class="columns">
+      <div class="column">
+        <div class="chip-sm" ng-repeat="code in codes">
+            <span class="chip-name">{{ code.name }}</span>
+            <button class="btn btn-clear" id="{{ 'code_' + code.name }}" ng-click="closeChip(code.name )"></button>
+        </div>
+      </div>
+    </div>
     <div class="columns">
       <div class="column col-md-6 centered">
-        <div class="input-group column">
-          <input id="search" type="text" class="form-input" placeholder="Stock code: KORS, LUV, IBM, DPS, EMC, ..." />
-          <button id="add" class="btn btn-primary input-group-btn">Add!</button>
-        </div>
+        <form>
+          <div class="input-group column">
+            <input ng-model="code" type="text" class="form-input" placeholder="Stock code: KORS, LUV, IBM, DPS, EMC, ..." />
+            <button ng-click="postCode()" class="btn btn-primary input-group-btn">Add!</button>
+          </div>
+        </form>
         <p class="text-center">by <a href="https://codepen.io/mirabalj">@mirabalj</a></p>
       </div>
     </div>

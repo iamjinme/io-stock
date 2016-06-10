@@ -15,9 +15,27 @@ iostockApp.config(['$stateProvider' ,'$urlRouterProvider',
 // Define the main controller on the barsquare module
 iostockApp.controller('mainController', function mainController($scope, $http) {
   var socket = io();
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
+  $scope.codes = [];
+  // Clear buttons
+  $scope.closeChip = function(element) {
+    $('#code_' + element).parent().addClass('hide');
+    socket.emit('pop', { code: element });
+  };
+  $scope.postCode = function() {
+    if (this.code) {
+      socket.emit('push', { code: this.code });
+      this.code = '';
+    }
+  };
+  socket.on('pop', function (data) {
+    var pos = $scope.codes.findIndex(function(element) {
+      return (element.name === data.code);
+    });
+    $scope.codes.splice(pos, 1);
+    $scope.$apply();
   });
-  $scope.message = "iostock";
+  socket.on('push', function (data) {
+    $scope.codes.push({ name: data.code });
+    $scope.$apply();
+  });
 });
