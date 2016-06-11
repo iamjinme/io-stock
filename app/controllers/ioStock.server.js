@@ -14,7 +14,6 @@ function IoStock () {
 		var options = { upsert: true, new: true, setDefaultsOnInsert: true };
 		Stock.findOneAndUpdate({ 'code': stock.code }, stock, options, function(err, result) {
     	if (err) throw err;
-			console.log(result);
     });
 	}
 
