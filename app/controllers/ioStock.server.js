@@ -40,7 +40,7 @@ function IoStock () {
 				}
 				res.json(graph_data);
 			} else {
-        res.json({'error': true, 'message': 'You have submitted an incorrect Stock code'})
+        res.json({'error': true, 'message': 'The data its not begin processed' })
       };
 		});
   };

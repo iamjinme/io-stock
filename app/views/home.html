@@ -1,4 +1,4 @@
-<div id="graph_line"></div>
+<linechart xkey="xkey" ykeys="ykeys" labels="labels" data="graph_data"></linechart>
 <div class="container">
   <div class="columns">
       <div class="column">
@@ -13,7 +13,6 @@
         <form>
           <div class="input-group column">
             <input ng-model="code" type="text" class="form-input" placeholder="Stock code: KORS, LUV, IBM, DPS, EMC, ..." />
-            <button ng-click="getGraph()" class="btn input-group-btn">Graph</button>
             <button ng-click="postCode()" class="btn btn-primary input-group-btn">Add!</button>
           </div>
           <div class="toast hide">
