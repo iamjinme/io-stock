@@ -3,7 +3,7 @@
       <div class="column">
         <div class="chip-sm" ng-repeat="code in codes">
             <span class="chip-name">{{ code.name }}</span>
-            <button class="btn btn-clear" id="{{ 'code_' + code.name }}" ng-click="closeChip(code.name )"></button>
+            <button class="btn btn-clear" id="{{ 'code_' + code.code }}" ng-click="closeChip(code.code)"></button>
         </div>
       </div>
     </div>
@@ -14,7 +14,13 @@
             <input ng-model="code" type="text" class="form-input" placeholder="Stock code: KORS, LUV, IBM, DPS, EMC, ..." />
             <button ng-click="postCode()" class="btn btn-primary input-group-btn">Add!</button>
           </div>
+          <div class="toast hide">
+            <button class="btn btn-clear float-right" ng-click="closeToast()"></button>
+            <i class="fa fa-exclamation-circle"></i>
+            <span id="code_message">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+          </div>
         </form>
+        <br/>
         <p class="text-center">by <a href="https://codepen.io/mirabalj">@mirabalj</a></p>
       </div>
     </div>

@@ -16,6 +16,10 @@ iostockApp.config(['$stateProvider' ,'$urlRouterProvider',
 iostockApp.controller('mainController', function mainController($scope, $http) {
   var socket = io();
   $scope.codes = [];
+  // Close Toast
+  $scope.closeToast = function() {
+    $('div.toast').addClass('hide');
+  };
   // Clear buttons
   $scope.closeChip = function(element) {
     $('#code_' + element).parent().addClass('hide');
@@ -23,19 +27,30 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
   };
   $scope.postCode = function() {
     if (this.code) {
-      socket.emit('push', { code: this.code });
+      $http.get('/api/code/' + this.code)
+        .success(function(data) {
+          if (data.name) {
+            socket.emit('push', { code: data.code, name: data.name.split(',')[0] });
+          } else {
+            $('#code_message').html(' ' + data.message);
+            $('div.toast').addClass('toast-danger').removeClass('hide');
+          }
+        })
+        .error(function(err) {
+          console.log('Error: ' + err);
+        });
       this.code = '';
     }
   };
   socket.on('pop', function (data) {
     var pos = $scope.codes.findIndex(function(element) {
-      return (element.name === data.code);
+      return (element.code === data.code);
     });
     $scope.codes.splice(pos, 1);
     $scope.$apply();
   });
   socket.on('push', function (data) {
-    $scope.codes.push({ name: data.code });
+    $scope.codes.push(data);
     $scope.$apply();
   });
 });

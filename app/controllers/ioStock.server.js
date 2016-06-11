@@ -9,7 +9,7 @@ function IoStock () {
 	var quandl_path = 'https://www.quandl.com/api/v3/datasets/WIKI/';
 
 	this.getCode = function(req, res) {
-		var code = req.params.code;
+		var code = req.params.code.toUpperCase();
 		var api_url = quandl_path + code + '/metadata.json'
 		request(api_url, function (error, response, body) {
       if (!error && response.statusCode == 200) {
