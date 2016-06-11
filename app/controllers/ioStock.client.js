@@ -47,11 +47,37 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
   $scope.xkey = 'period';
   $scope.ykeys = [];
   $scope.labels = [];
+  // Load initial data
+  $scope.loadData = function(i) {
+    if (typeof i === 'undefined') {
+      var i = 0;
+    }
+    var code = $scope.codes[i].code;
+    $http.get('/api/stock/' + code)
+      .success(function(data) {
+        if (data) {
+          $scope.ykeys.push(code);
+          $scope.labels.push(code);
+          data = JSON.stringify($scope.push($scope.graph_data, data, code));
+          $scope.graph_data = JSON.parse(data);
+        }
+        i++;
+        if (i < $scope.codes.length) {
+          $scope.loadData(i);
+        }
+      })
+      .error(function(err) {
+        console.log('Error: ' + err);
+      });
+  };
   // Load initial codes
   $http.get('/api/code')
     .success(function(data) {
       if (data) {
         $scope.codes = data;
+        if ($scope.codes.length) {
+          $scope.loadData();
+        }
       }
     });
   // Close Toast
