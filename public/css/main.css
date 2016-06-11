@@ -1,3 +1,11 @@
+div .empty {
+  margin: 0 auto;
+  padding: 5px 5px 5px 5px;
+  background: #009688;
+}
+#main .empty-meta {
+  color: #000;
+}
 .container a {
   text-decoration: none;
   background: #E0995E;
