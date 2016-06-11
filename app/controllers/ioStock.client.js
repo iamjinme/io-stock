@@ -28,6 +28,7 @@ iostockApp.directive('linechart', function() {
             xkey = $scope[attrs.xkey],
             ykeys= $scope[attrs.ykeys],
             labels= $scope[attrs.labels];
+        //console.log(data, xkey, ykeys, labels);
         Morris.Line({
           element: element,
           data: data,
@@ -44,21 +45,10 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
   var socket = io();
   $scope.codes = [];
   // Morris graph parameters
-  $scope.graph_data = [
-     {"period": "2011 Q3", "licensed": 3407, "close": 660},
-     {"period": "2011 Q2", "licensed": 3351, "close": 629},
-     {"period": "2011 Q1", "licensed": 3269, "close": 618},
-     {"period": "2010 Q4", "licensed": 3246, "close": 661},
-     {"period": "2009 Q4", "licensed": 3171, "close": 676},
-     {"period": "2008 Q4", "licensed": 3155, "close": 681},
-     {"period": "2007 Q4", "licensed": 3226, "close": 620},
-     {"period": "2006 Q4", "licensed": 3245, "close": null},
-     {"period": "2005 Q4", "licensed": 3289, "close": null}
-  ];
-  console.log($scope.graph_data);
+  $scope.graph_data = [];
   $scope.xkey = 'period';
-  $scope.ykeys = ['close'];
-  $scope.labels = ['Close'];
+  $scope.ykeys = [];
+  $scope.labels = [];
   // Close Toast
   $scope.closeToast = function() {
     $('div.toast').addClass('hide');
@@ -68,13 +58,36 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
     $('#code_' + element).parent().addClass('hide');
     socket.emit('pop', { code: element });
   };
-  $scope.getData = function(code) {
+  // Fusion tables
+  function periodExist(element) {
+    return element.period === period;
+  }
+  $scope.push = function(old_array, new_array, code) {
+    for(var i in new_array) {
+      period = new_array[i].period;
+      var pos = old_array.findIndex(periodExist);
+      if (pos >= 0) {
+        old_array[pos][code] = new_array[i].close;
+      } else {
+        var slot = {
+          'period' : new_array[i].period
+        }
+        slot[code] = new_array[i].close;
+        old_array.push(slot);
+      }
+    }
+    return old_array;
+  }
+  // Get Stock data
+  $scope.getData = function(code, name) {
     if (code) {
       $http.get('/api/stock/' + code)
         .success(function(data) {
           if (data) {
-            $scope.graph_data = data;
-            console.log(data.length);
+            $scope.ykeys.push(code);
+            $scope.labels.push(code);
+            data = JSON.stringify($scope.push($scope.graph_data, data, code));
+            $scope.graph_data = JSON.parse(data);
           }
         })
         .error(function(err) {
@@ -82,6 +95,7 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
         });
     }
   }
+  // Post code push
   $scope.postCode = function() {
     if (this.code) {
       $http.get('/api/code/' + this.code)
@@ -107,7 +121,7 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
     $scope.$apply();
   });
   socket.on('push', function (data) {
-    $scope.getData(data.code);
+    $scope.getData(data.code, data.name);
     $scope.codes.push(data);
     $scope.$apply();
   });
