@@ -22,13 +22,11 @@ iostockApp.directive('linechart', function() {
     // observe and manipulate the DOM
     link: function($scope, element, attrs) {
       $scope.$watch('graph_data', function() {
-        console.log('updating chart...');
         $(element).html('');
         var data = $scope[attrs.data],
             xkey = $scope[attrs.xkey],
             ykeys= $scope[attrs.ykeys],
             labels= $scope[attrs.labels];
-        //console.log(data, xkey, ykeys, labels);
         Morris.Line({
           element: element,
           data: data,
@@ -61,6 +59,12 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
   // Fusion tables
   function periodExist(element) {
     return element.period === period;
+  }
+  $scope.pop = function(array, code) {
+    for(var i in array) {
+      delete array[i][code];
+    }
+    return array
   }
   $scope.push = function(old_array, new_array, code) {
     for(var i in new_array) {
@@ -117,6 +121,10 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
     var pos = $scope.codes.findIndex(function(element) {
       return (element.code === data.code);
     });
+    $scope.ykeys.splice(pos, 1);
+    $scope.labels.splice(pos, 1);
+    data = JSON.stringify($scope.pop($scope.graph_data, data.code));
+    $scope.graph_data = JSON.parse(data);
     $scope.codes.splice(pos, 1);
     $scope.$apply();
   });
