@@ -31,4 +31,6 @@ module.exports = function (app, io) {
 
 	app.get('/api/code/:code', ioStock.getCode);
 
+	app.get('/api/stock/:code', ioStock.getData);
+
 };
