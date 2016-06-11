@@ -16,11 +16,13 @@ module.exports = function (app, io) {
 		socket.on('push', function(data){
 			console.log('push:', data)
 			data.code = data.code.toUpperCase();
+			ioStock.saveCode(data);
 			io.emit('push', data);
 		});
 		socket.on('pop', function(data){
 			console.log('pop:', data)
 			data.code = data.code.toUpperCase();
+			ioStock.removeCode(data);
 			io.emit('pop', data);
 		});
 	});
@@ -32,5 +34,7 @@ module.exports = function (app, io) {
 	app.get('/api/code/:code', ioStock.getCode);
 
 	app.get('/api/stock/:code', ioStock.getData);
+
+	app.get('/api/code', ioStock.getCodes);
 
 };

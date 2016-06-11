@@ -47,6 +47,13 @@ iostockApp.controller('mainController', function mainController($scope, $http) {
   $scope.xkey = 'period';
   $scope.ykeys = [];
   $scope.labels = [];
+  // Load initial codes
+  $http.get('/api/code')
+    .success(function(data) {
+      if (data) {
+        $scope.codes = data;
+      }
+    });
   // Close Toast
   $scope.closeToast = function() {
     $('div.toast').addClass('hide');

@@ -2,13 +2,37 @@
 
 var request = require('request');
 
-var Users = require('../models/users.js');
+var Stock = require('../models/stock.js');
 
 function IoStock () {
 
 	var quandl_path = 'https://www.quandl.com/api/v3/datasets/WIKI/';
 	var quandl_api_key = process.env.QUANDL_API_KEY;
 	var format = '.json';
+
+	this.saveCode = function(stock) {
+		var options = { upsert: true, new: true, setDefaultsOnInsert: true };
+		Stock.findOneAndUpdate({ 'code': stock.code }, stock, options, function(err, result) {
+    	if (err) throw err;
+			console.log(result);
+    });
+	}
+
+	this.removeCode = function(stock) {
+		Stock.findOne({ 'code': stock.code }, function(err, result) {
+    	if (err) throw err;
+			if (result) {
+				result.remove();
+			}
+    });
+	}
+
+	this.getCodes = function(req, res) {
+		Stock.find({}, { _id: false, __v: false }, function(err, codes) {
+			if (err) throw err;
+			res.json(codes);
+		});
+	}
 
 	this.getCode = function(req, res) {
 		var code = req.params.code.toUpperCase();
