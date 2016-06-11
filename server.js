@@ -21,24 +21,7 @@ db.once('open', function() {
 	app.use('/public', express.static(process.cwd() + '/public'));
 	app.use('/views', express.static(process.cwd() + '/app/views'));
 
-	routes(app);
-
-	io.on('connection', function (socket) {
-	  socket.emit('news', { hello: 'world' });
-	  socket.on('my other event', function (data) {
-	    console.log(data);
-	  });
-		socket.on('push', function(data){
-			console.log('push:', data)
-			data.code = data.code.toUpperCase();
-	    io.emit('push', data);
-	  });
-		socket.on('pop', function(data){
-			console.log('pop:', data)
-			data.code = data.code.toUpperCase();
-	    io.emit('pop', data);
-	  });
-	});
+	routes(app, io);
 
 	var port = process.env.PORT || 8080;
 	http.listen(port,  function () {

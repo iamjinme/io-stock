@@ -1,8 +1,25 @@
 'use strict';
 
+var request = require('request');
+
 var Users = require('../models/users.js');
 
-function ClickHandler () {
+function IoStock () {
+
+	var quandl_path = 'https://www.quandl.com/api/v3/datasets/WIKI/';
+
+	this.getCode = function(req, res) {
+		var code = req.params.code;
+		var api_url = quandl_path + code + '/metadata.json'
+		request(api_url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+				var code = JSON.parse(body).dataset;
+				res.json({ 'code': code.dataset_code, 'name': code.name });
+			} else {
+        res.json({'error': true, 'message': 'You have submitted an incorrect Stock code'})
+      };
+		});
+  };
 
 	this.getClicks = function (req, res) {
 		Users
@@ -38,4 +55,4 @@ function ClickHandler () {
 
 }
 
-module.exports = ClickHandler;
+module.exports = IoStock;
