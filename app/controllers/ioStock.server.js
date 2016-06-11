@@ -26,10 +26,16 @@ function IoStock () {
   };
 
 	this.getData = function(req, res) {
+		var pad = function(s) { return (s < 10) ? '0' + s : s; }
+		var start_date = function() {
+			var date = new Date();
+			return (date.getFullYear() - 1) + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDay());
+		}
 		var code = req.params.code.toUpperCase();
 		var api_url  = quandl_path + code + format;
 		    api_url += '?api_key=' + quandl_api_key;
-				api_url += '&collapse=monthly&column_index=4'; // Only Close Monthly
+				api_url += '&start_date=' + start_date();
+				api_url += '&column_index=4'; // Only Close Monthly
 		// Request to Quandl
 		var graph_data = [];
 		request(api_url, function (error, response, body) {
