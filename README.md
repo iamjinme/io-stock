@@ -24,7 +24,7 @@ In order to use ioStock App, you must have the following installed:
 To install ioStock App, simply enter the below in the terminal window:
 
 ```bash
-$ git clone https://github.com/mirabalj/voting-camp.git your-project
+$ git clone https://github.com/mirabalj/io-stock.git your-project
 ```
 
 To install the dependencies, enter the following in your terminal:
