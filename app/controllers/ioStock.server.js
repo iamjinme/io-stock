@@ -69,7 +69,7 @@ function IoStock () {
 				}
 				res.json(graph_data);
 			} else {
-        res.json({'error': true, 'message': 'The data its not begin processed' })
+        res.json({'error': true, 'message': 'The data its not begin processed', 'response': response })
       };
 		});
   };
