@@ -52,7 +52,7 @@ function IoStock () {
 		var pad = function(s) { return (s < 10) ? '0' + s : s; }
 		var start_date = function() {
 			var date = new Date();
-			return (date.getFullYear() - 1) + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDay());
+			return (date.getFullYear() - 1) + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
 		}
 		var code = req.params.code.toUpperCase();
 		var api_url  = quandl_path + code + format;
@@ -73,38 +73,6 @@ function IoStock () {
       };
 		});
   };
-
-	this.getClicks = function (req, res) {
-		Users
-			.findOne({ 'github.id': req.user.github.id }, { '_id': false })
-			.exec(function (err, result) {
-				if (err) { throw err; }
-
-				res.json(result.nbrClicks);
-			});
-	};
-
-	this.addClick = function (req, res) {
-		Users
-			.findOneAndUpdate({ 'github.id': req.user.github.id }, { $inc: { 'nbrClicks.clicks': 1 } })
-			.exec(function (err, result) {
-					if (err) { throw err; }
-
-					res.json(result.nbrClicks);
-				}
-			);
-	};
-
-	this.resetClicks = function (req, res) {
-		Users
-			.findOneAndUpdate({ 'github.id': req.user.github.id }, { 'nbrClicks.clicks': 0 })
-			.exec(function (err, result) {
-					if (err) { throw err; }
-
-					res.json(result.nbrClicks);
-				}
-			);
-	};
 
 }
 
